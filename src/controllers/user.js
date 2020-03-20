@@ -1,13 +1,14 @@
-const { User, validation } = require('../models/user');
-const { pick } = require('lodash');
-const hashing = require('../utils/hash');
+import { User, validation } from '../models/user'
+import { pick } from 'lodash';
+import hashing from '../utils/hash';
+import jwt from 'jsonwebtoken';
 
 module.exports = {
   async getUsers(ctx, next) {
     ctx.body = 'Hello'
   },
 
-  async createUser(ctx, next) {
+  async userAuth(ctx, next) {
     const { error } = validation(ctx.request.body);
     if (error) {
       ctx.body = error.details[0].message
@@ -25,7 +26,6 @@ module.exports = {
     user = new User(pick(ctx.request.body, ['name', 'email', 'password']));
     user.password = await hashing(user.password);
     await user.save();
-
     ctx.body = pick(user, ['_id', 'name', 'email']);
   }
 }
