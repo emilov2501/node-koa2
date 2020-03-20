@@ -5,7 +5,11 @@
   "author": "Эльдияр Эмилов <emilov2501@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec babel-node index.js"
+    "dev": "nodemon --exec babel-node index.js",
+    "postinstall": "link-module-alias"
+  },
+  "_moduleAliasIgnoreWarning": {
+    "@"      : "./src"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -24,6 +28,7 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/node": "^7.8.7",
-    "@babel/preset-env": "^7.8.7"
+    "@babel/preset-env": "^7.8.7",
+    "link-module-alias": "^1.2.0"
   }
 }

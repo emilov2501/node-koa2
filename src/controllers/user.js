@@ -1,6 +1,6 @@
-import { User, validation } from '../models/user'
+import { User, validation } from '@/models/user'
 import { pick } from 'lodash';
-import hashing from '../utils/hash';
+import hashing from '@/utils/hash';
 import jwt from 'jsonwebtoken';
 
 module.exports = {
