@@ -6,7 +6,8 @@ import db from './db';
 
 const app = new Koa();
 app.use(bodyParser());
-const router = require('./routes');
+
+import router from './routes';
 
 app
   .use(router.routes())

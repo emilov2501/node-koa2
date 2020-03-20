@@ -31,7 +31,7 @@ function validation(body) {
   return Joi.validate(body, schema)
 }
 
-module.exports = {
+export default {
   User,
   validation
 };

@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import hashing from '@/utils/hash';
 import jwt from 'jsonwebtoken';
 
-module.exports = {
+export default {
   async getUsers(ctx, next) {
     ctx.body = 'Hello'
   },
@@ -28,4 +28,4 @@ module.exports = {
     await user.save();
     ctx.body = pick(user, ['_id', 'name', 'email']);
   }
-}
+};

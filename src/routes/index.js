@@ -3,9 +3,13 @@ import userController from '@/controllers/user';
 
 const router = new Router();
 
-
+// User
 router
-  .get('/user', userController.getUsers)
-  .post('/user', userController.userAuth)
+  .post('/auth', userController.getUsers)
+  .post('/register', userController.userAuth)
 
-module.exports = router
+// Posts 
+router
+  .get('/post', (ctx, next) => ctx.body = 'Hello')
+
+export default router
