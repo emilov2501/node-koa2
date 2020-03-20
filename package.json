@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Эльдияр Эмилов <emilov2501@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "bcrypt": "^4.0.1",
     "config": "^3.3.0",
@@ -12,6 +15,7 @@
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
     "koa-body": "^4.1.1",
-    "mongoose": "^5.9.5"
+    "mongoose": "^5.9.5",
+    "source-map": "^0.7.3"
   }
 }

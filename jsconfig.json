@@ -4,8 +4,7 @@
     "target":"es6",
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "module": "commonJS"
+    }
   },
   "exclude": ["node_modules"]
 }
