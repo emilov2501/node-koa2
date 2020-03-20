@@ -1,5 +1,6 @@
 const { User, validation } = require('../models/user');
 const { pick } = require('lodash');
+const hashing = require('../utils/hash');
 
 module.exports = {
   async getUsers(ctx, next) {
@@ -22,8 +23,9 @@ module.exports = {
     }
 
     user = new User(pick(ctx.request.body, ['name', 'email', 'password']));
+    user.password = await hashing(user.password);
     await user.save();
 
-    ctx.body = user
+    ctx.body = pick(user, ['_id', 'name', 'email']);
   }
 }
