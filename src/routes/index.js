@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 import userController from '@/controllers/user';
-
+import postController from '@/controllers/post';
+import validateToken from '@/middleware/verify-token';
 const router = new Router();
 
 // User
@@ -10,6 +11,8 @@ router
 
 // Posts 
 router
-  .get('/post', (ctx, next) => ctx.body = 'Hello')
+  .get('/posts', postController.get)
+  .post('/posts', postController.create)
+
 
 export default router

@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 
-const userSchema = mongoose.Schema({
+const EXPIRES_IN_MINUTES = '1440m'
+
+export const userSchema = mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -19,10 +21,10 @@ const userSchema = mongoose.Schema({
   }
 });
 
-userSchema.statics.generateToken = function(user) {
-  if (!user) return console.error('User is not defined');
-
-  return jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+userSchema.statics.generateToken = function(payload) {
+  return jwt.sign(payload, config.get('jwtPrivateKey'), {
+    expiresIn: EXPIRES_IN_MINUTES
+  });
 }
 
 const User = new mongoose.model('User', userSchema);
