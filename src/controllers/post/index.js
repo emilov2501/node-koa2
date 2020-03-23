@@ -1,6 +1,9 @@
 import Post from '@/models/posts';
+import User from '@/models/user';
 import { postValidation } from '@/models/posts/validation';
 import { pick } from 'lodash';
+import { HandleResponse, HttpStatus } from '@/utils';
+
 
 const crud = {
   // Create post
@@ -8,21 +11,46 @@ const crud = {
     const error = postValidation(ctx.request.body);
     if (error) return ctx.body = error;
 
-    let post;
-    post = new Post(pick(ctx.request.body, ['title', 'description', 'isPublished', 'authorId']));
-    await post.save();
+    try {
+      const user = await User.findOne({ _id: ctx.request.body.authorId });
 
-    ctx.body = post;
+      const post = new Post({
+        ...pick(ctx.request.body, ['title', 'description', 'isPublished']),
+        author: {
+          name: user.name
+        }
+      });
+      
+      await post.save();
+      
+      return new HandleResponse(ctx)
+        .sendStatus(HttpStatus.OK)
+        .sendMessage({
+          data: post,
+          success: true
+        })
+      
+    } catch(ex) {
+      return new HandleResponse(ctx)
+        .sendStatus(HttpStatus.notFound)
+        .sendMessage({
+          data: 'author not founded'
+        });
+    }
   },
 
   // Get posts
   async get(ctx, next) {
     const posts = await Post
       .find()
-      .populate('authorId', '-_id name email')
-      .select('authorId title')
+      .select('author title')
 
-    ctx.body = posts
+    return new HandleResponse(ctx)
+      .sendStatus(HttpStatus.OK)
+      .sendMessage({
+        data: posts,
+        success: true
+      })
   },
 
   // Delete post

@@ -13,9 +13,12 @@ export const postSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  authorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  author: {
+    type: mongoose.Schema({
+      name: {
+        type: String
+      }
+    })
   },
   createdAt: {
     type: Date,
