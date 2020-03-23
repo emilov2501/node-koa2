@@ -3,7 +3,7 @@ import User from '@/models/user';
 import { postValidation } from '@/models/posts/validation';
 import { pick } from 'lodash';
 import { Response, HttpStatus } from '@/utils';
-
+import createError from 'http-errors';
 
 const crud = {
   // Create post
@@ -23,19 +23,18 @@ const crud = {
 
       await post.save();
       
-      return new Response(ctx)
-        .sendStatus(HttpStatus.OK)
-        .sendMessage({
-          data: post,
-          success: true
-        })
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        data: post,
+        success: true
+      }
       
     } catch(ex) {
-      return new Response(ctx)
-        .sendStatus(HttpStatus.notFound)
-        .sendMessage({
-          data: 'author not founded'
-        });
+      ctx.status = HttpStatus.badRequest;
+      ctx.body = {
+        message: `Author is not found. ${ex.message}`,
+        success: false
+      };
     }
   },
 
@@ -45,12 +44,12 @@ const crud = {
       .find()
       .select('author description title')
 
-    return new Response(ctx)
-      .sendStatus(HttpStatus.OK)
-      .sendMessage({
-        data: posts,
-        success: true
-      })
+    ctx.status = HttpStatus.OK;
+    ctx.body = {
+      data: posts,
+      length: posts.length,
+      success: true
+    }
   },
 
   // Delete post
@@ -60,27 +59,25 @@ const crud = {
     try {
       const post = await Post.findOneAndDelete({ _id: postId });
       if (!post) {
-        return new Response(ctx)
-          .sendStatus(HttpStatus.notFound)
-          .sendMessage({
-            data: `Post ${postId} not found`,
-            success: false
-          });
+        ctx.status = HttpStatus.notFound;
+        ctx.body = {
+          message: `Post not found`,
+          success: false
+        };
+        return;
       }
 
-      return new Response(ctx)
-        .sendStatus(HttpStatus.OK)
-        .sendMessage({
-          success: true
-        });
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        success: true
+      }
       
     } catch (ex) {
-      return new Response(ctx)
-        .sendStatus(HttpStatus.badRequest)
-        .sendMessage({
-          data: 'DELETE: _id incorrect',
-          success: false
-        })
+      ctx.status = HttpStatus.badRequest;
+      ctx.body = {
+        message: ex.message,
+        success: false
+      }
     }
   },
 
@@ -98,17 +95,26 @@ const crud = {
       }, { new: true });
 
       if (!post) {
-        return ctx.throw(HttpStatus.notFound, `Post ${query.id} not found`, { post })
+        ctx.status = HttpStatus.notFound;
+        ctx.body = {
+          success: false,
+          message: `Post ${post} is not found`
+        }
+        return;
       }
 
-      return new Response(ctx)
-        .sendStatus(HttpStatus.OK)
-        .sendMessage({
-          success: true
-        });
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        data: post,
+        success: true
+      }
       
     } catch (ex) {
-      return ctx.throw(HttpStatus.badRequest, ex)
+      ctx.status = HttpStatus.badRequest;
+      ctx.body = {
+        message: ex.message,
+        success: false
+      }
     }
   }
 };

@@ -3,7 +3,9 @@ import mongoose  from 'mongoose';
 async function connection (path, fn) {
   try {
     const connect = await mongoose.connect(path, { useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true });
-    fn()
+    if (connect) {
+      fn()
+    }
   } catch (ex) {
     fn(ex)
   }
