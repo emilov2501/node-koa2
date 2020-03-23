@@ -14,6 +14,7 @@ router
   .get('/posts', postController.get)
   .post('/posts', postController.create)
   .del('/post/:id', postController.delete)
+  .put('/post/:id', postController.put)
 
 
 export default router

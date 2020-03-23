@@ -43,7 +43,7 @@ const crud = {
   async get(ctx, next) {
     const posts = await Post
       .find()
-      .select('author title')
+      .select('author description title')
 
     return new Response(ctx)
       .sendStatus(HttpStatus.OK)
@@ -85,8 +85,31 @@ const crud = {
   },
 
   // Change post
-  put() {
+  async put(ctx, next) {
+    const query = {
+      id: ctx.params.id,
+      title: ctx.request.body.title,
+      description: ctx.request.body.description
+    }
+    
+    try {
+      const post = await Post.findOneAndUpdate({ _id: query.id }, {
+        ...pick(query, ['title', 'description'])
+      }, { new: true });
 
+      if (!post) {
+        return ctx.throw(HttpStatus.notFound, `Post ${query.id} not found`, { post })
+      }
+
+      return new Response(ctx)
+        .sendStatus(HttpStatus.OK)
+        .sendMessage({
+          success: true
+        });
+      
+    } catch (ex) {
+      return ctx.throw(HttpStatus.badRequest, ex)
+    }
   }
 };
 
