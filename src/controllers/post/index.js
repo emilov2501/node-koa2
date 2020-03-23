@@ -2,7 +2,7 @@ import Post from '@/models/posts';
 import User from '@/models/user';
 import { postValidation } from '@/models/posts/validation';
 import { pick } from 'lodash';
-import { HandleResponse, HttpStatus } from '@/utils';
+import { Response, HttpStatus } from '@/utils';
 
 
 const crud = {
@@ -20,10 +20,10 @@ const crud = {
           name: user.name
         }
       });
-      
+
       await post.save();
       
-      return new HandleResponse(ctx)
+      return new Response(ctx)
         .sendStatus(HttpStatus.OK)
         .sendMessage({
           data: post,
@@ -31,7 +31,7 @@ const crud = {
         })
       
     } catch(ex) {
-      return new HandleResponse(ctx)
+      return new Response(ctx)
         .sendStatus(HttpStatus.notFound)
         .sendMessage({
           data: 'author not founded'
@@ -45,7 +45,7 @@ const crud = {
       .find()
       .select('author title')
 
-    return new HandleResponse(ctx)
+    return new Response(ctx)
       .sendStatus(HttpStatus.OK)
       .sendMessage({
         data: posts,
@@ -54,8 +54,34 @@ const crud = {
   },
 
   // Delete post
-  delete() {
+  async delete(ctx, next) {
+    const postId = ctx.params.id;
+    
+    try {
+      const post = await Post.findOneAndDelete({ _id: postId });
+      if (!post) {
+        return new Response(ctx)
+          .sendStatus(HttpStatus.notFound)
+          .sendMessage({
+            data: `Post ${postId} not found`,
+            success: false
+          });
+      }
 
+      return new Response(ctx)
+        .sendStatus(HttpStatus.OK)
+        .sendMessage({
+          success: true
+        });
+      
+    } catch (ex) {
+      return new Response(ctx)
+        .sendStatus(HttpStatus.badRequest)
+        .sendMessage({
+          data: 'DELETE: _id incorrect',
+          success: false
+        })
+    }
   },
 
   // Change post

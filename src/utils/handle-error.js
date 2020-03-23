@@ -1,4 +1,4 @@
-export class HandleResponse {
+export class Response {
   /**
    * 
    * @param {Object} ctx // Context of Request and Response

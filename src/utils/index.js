@@ -1,2 +1,2 @@
-export { HandleResponse } from './handle-error';
+export { Response } from './handle-error';
 export { default as HttpStatus } from './http-status-adapter';

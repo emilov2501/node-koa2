@@ -13,6 +13,7 @@ router
 router
   .get('/posts', postController.get)
   .post('/posts', postController.create)
+  .del('/post/:id', postController.delete)
 
 
 export default router
