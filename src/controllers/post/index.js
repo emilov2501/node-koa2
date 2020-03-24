@@ -17,7 +17,8 @@ const crud = {
       const post = new Post({
         ...pick(ctx.request.body, ['title', 'description', 'isPublished']),
         author: {
-          name: user.name
+          name: user.name,
+          userId: user._id
         }
       });
 
@@ -42,7 +43,7 @@ const crud = {
   async get(ctx, next) {
     const posts = await Post
       .find()
-      .select('author description title')
+      .select('author description title comments')
 
     ctx.status = HttpStatus.OK;
     ctx.body = {
@@ -117,6 +118,6 @@ const crud = {
       }
     }
   }
-};
+};  
 
 export default crud;

@@ -7,6 +7,8 @@ const router = new Router();
 
 // User
 router
+  .get('/users', userController.getUsers)
+  .get('/user/:id', userController.getUserById)
   .post('/auth', userController.userAuth)
   .post('/register', userController.userRegister)
 

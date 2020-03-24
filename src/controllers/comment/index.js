@@ -3,7 +3,10 @@ import Post from '@/models/posts';
 import User from '@/models/user';
 import { commentValidation } from '@/models/comments/validation';
 import HttpStatus from '@/utils/http-status-adapter';
+import Fawn from 'fawn';
+import mongoose from 'mongoose';
 
+Fawn.init(mongoose);
 
 const crud = {
   async get(ctx, next) {
@@ -43,12 +46,23 @@ const crud = {
           body: ctx.request.body.body
         });
 
-        comment.save();
+        try {
+          new Fawn.Task()
+            .save('comments', comment)
+            .update('posts', { _id: post._id }, {
+              $inc: { comments: +1 }
+            })
+            .run()
 
-        ctx.status = HttpStatus.OK;
-        ctx.body = {
-          success: true
-        };
+            ctx.status = HttpStatus.OK;
+            ctx.body = {
+              success: true,
+              data: comment
+            };
+        } catch(ex) {
+          ctx.status = HttpStatus.serverError;
+          ctx.body = 'Something failed'
+        }
       }
     } catch (ex) {
       ctx.status = HttpStatus.badRequest;

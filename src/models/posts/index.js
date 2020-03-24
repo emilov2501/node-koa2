@@ -15,6 +15,9 @@ export const postSchema = mongoose.Schema({
   },
   author: {
     type: mongoose.Schema({
+      userId: {
+        type: mongoose.Schema.Types.ObjectId
+      },
       name: {
         type: String
       }

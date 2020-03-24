@@ -1,4 +1,5 @@
 import User from '@/models/user';
+import Post from '@/models/posts';
 import { authValidation, registerValidation } from '@/models/user/validation'
 import { pick } from 'lodash';
 import hashing from '@/utils/hash';
@@ -55,5 +56,60 @@ export default {
       data: pick(user, userSerialization),
       token
     };
+  },
+
+  async getUsers(ctx, next) {
+    try {
+      const users = await User
+        .find()
+        .select(userSerialization)
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        data: users,
+        success: true
+      }
+    } catch {
+      ctx.status = HttpStatus.badRequest
+      ctx.body = {
+        success: false,
+        message: 'Bad request'
+      }
+    }
+  },
+
+  async getUserById(ctx, next) {
+    const userId = ctx.params.id;
+    try {
+      const user = await User
+        .findOne({ _id: userId })
+        .select('-password')
+
+      if (!user) {
+        ctx.status = HttpStatus.notFound;
+        ctx.body = {
+          success: false,
+          message: 'User not found'
+        }
+      }
+
+      try {
+        const posts = await Post
+          .find({ 'author.userId': userId })
+          .select('-author')
+        ctx.status = HttpStatus.OK;
+        ctx.body = {
+          user,
+          posts
+        }
+      } catch(ex) {
+        console.log(ex)
+      }
+    } catch (ex) {
+      ctx.status = HttpStatus.badRequest;
+      ctx.body = {
+        message: ex,
+        success: false
+      }
+    }
   }
 };
