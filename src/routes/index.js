@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import userController from '@/controllers/user';
 import postController from '@/controllers/post';
 import commentController from '@/controllers/comment';
+import likeController from '@/controllers/likes';
 import validateToken from '@/middleware/verify-token';
 const router = new Router();
 
@@ -23,5 +24,9 @@ router
 router
   .get('/comments', validateToken, commentController.get)
   .post('/comments', validateToken, commentController.create)
+
+// Likes
+router
+  .post('/like', likeController.fetchLike);
 
 export default router

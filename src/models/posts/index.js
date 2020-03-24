@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-export const postSchema = mongoose.Schema({
+export const postSchema = new Schema({
   title: {
     type: String,
     maxlength: 100,
@@ -24,6 +25,10 @@ export const postSchema = mongoose.Schema({
     })
   },
   comments: {
+    type: Number,
+    default: 0
+  },
+  likes: {
     type: Number,
     default: 0
   },

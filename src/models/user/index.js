@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import config from 'config';
+const Schema = mongoose.Schema;
 
 const EXPIRES_IN_MINUTES = '1440m'
 
-export const userSchema = mongoose.Schema({
+export const userSchema = new Schema({
   name: {
     type: String,
     required: true
