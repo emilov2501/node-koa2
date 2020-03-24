@@ -30,7 +30,8 @@ export const postSchema = new Schema({
   },
   likes: {
     type: Number,
-    default: 0
+    default: 0,
+    minlength: 0
   },
   createdAt: {
     type: Date,

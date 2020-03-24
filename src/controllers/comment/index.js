@@ -6,7 +6,7 @@ import HttpStatus from '@/utils/http-status-adapter';
 import Fawn from 'fawn';
 import mongoose from 'mongoose';
 
-Fawn.init(mongoose);
+Fawn.init(mongoose, 'comments');
 
 const crud = {
   async get(ctx, next) {

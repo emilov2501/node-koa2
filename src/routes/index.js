@@ -10,7 +10,7 @@ const router = new Router();
 router
   .get('/users', validateToken, userController.getUsers)
   .get('/user/:id', validateToken, userController.getUserById)
-  .post('/auth', validateToken, userController.userAuth)
+  .post('/auth', userController.userAuth)
   .post('/register', userController.userRegister)
 
 // Posts 
@@ -27,6 +27,6 @@ router
 
 // Likes
 router
-  .post('/like', likeController.fetchLike);
+  .post('/like/:id', likeController.fetchLike)
 
 export default router

@@ -21,7 +21,7 @@ const crud = {
           userId: user._id
         }
       });
-
+      
       await post.save();
       
       ctx.status = HttpStatus.OK;
