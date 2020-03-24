@@ -7,21 +7,21 @@ const router = new Router();
 
 // User
 router
-  .get('/users', userController.getUsers)
-  .get('/user/:id', userController.getUserById)
-  .post('/auth', userController.userAuth)
+  .get('/users', validateToken, userController.getUsers)
+  .get('/user/:id', validateToken, userController.getUserById)
+  .post('/auth', validateToken, userController.userAuth)
   .post('/register', userController.userRegister)
 
 // Posts 
 router
-  .get('/posts', postController.get)
-  .post('/posts', postController.create)
-  .del('/post/:id', postController.delete)
-  .put('/post/:id', postController.put)
+  .get('/posts', validateToken, postController.get)
+  .post('/posts', validateToken, postController.create)
+  .del('/post/:id', validateToken, postController.delete)
+  .put('/post/:id', validateToken, postController.put)
 
 // Comments
 router
-  .get('/comments', commentController.get)
-  .post('/comments', commentController.create)
+  .get('/comments', validateToken, commentController.get)
+  .post('/comments', validateToken, commentController.create)
 
 export default router
