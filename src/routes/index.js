@@ -10,12 +10,13 @@ const router = new Router();
 router
   .get('/users', validateToken, userController.getUsers)
   .get('/user/:id', validateToken, userController.getUserById)
-  .post('/auth', userController.userAuth)
-  .post('/register', userController.userRegister)
+  .post('/api/auth', userController.userAuth)
+  .post('/api/register', userController.userRegister)
 
 // Posts 
 router
-  .get('/posts', validateToken, postController.get)
+  .get('/posts', validateToken, postController.all)
+  .get('/post/:id', validateToken, postController.get)
   .post('/posts', validateToken, postController.create)
   .del('/post/:id', validateToken, postController.delete)
   .put('/post/:id', validateToken, postController.put)

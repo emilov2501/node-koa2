@@ -40,7 +40,7 @@ const crud = {
   },
 
   // Get posts
-  async get(ctx, next) {
+  async all(ctx, next) {
     const posts = await Post
       .find()
       .select('author description title comments')
@@ -50,6 +50,36 @@ const crud = {
       data: posts,
       length: posts.length,
       success: true
+    }
+  },
+
+  async get(ctx) {
+    const postId = ctx.params.id;
+    try {
+      const post = await Post
+        .findOne({ _id: postId })
+        .select('-author')
+
+      if (!post) {
+        ctx.status = HttpStatus.notFound
+        ctx.body = {
+          success: false,
+          message: 'Post not found'
+        }
+      }
+
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        data: post,
+        success: true
+      }
+      
+    } catch (ex) {
+      ctx.status = HttpStatus.badRequest
+      ctx.body = {
+        success: false,
+        message: ex
+      }
     }
   },
 
