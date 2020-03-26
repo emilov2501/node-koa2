@@ -1,5 +1,6 @@
 import User from '@/models/user';
 import Post from '@/models/posts';
+import SharedPost from '@/models/posts/shared';
 import { authValidation, registerValidation } from '@/models/user/validation'
 import bcrypt from 'bcrypt';
 import { userSerialization } from './serialization';
@@ -95,10 +96,18 @@ export default {
         const posts = await Post
           .find({ 'author.userId': userId })
           .select('-author')
+
+        const shares = await SharedPost
+          .find({ user: userId })
+          .populate('user post', '-password')
+
         ctx.status = HttpStatus.OK;
         ctx.body = {
           user,
-          posts
+          posts: {
+            publication: posts,
+            shares
+          }
         }
       } catch(ex) {
         console.log(ex)
@@ -107,6 +116,22 @@ export default {
       ctx.status = HttpStatus.badRequest;
       ctx.body = {
         message: ex,
+        success: false
+      }
+    }
+  },
+
+  async sharePost(ctx, next) {
+    const postId = ctx.params.id;
+    try {
+
+      const post = await Post.findOne({ _id: postId });
+      
+
+    } catch (ex) {
+      ctx.status = HttpStatus.serverError;
+      ctx.body = {
+        message: 'Server error',
         success: false
       }
     }

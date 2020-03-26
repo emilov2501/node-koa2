@@ -4,6 +4,7 @@ import postController from '@/controllers/post';
 import commentController from '@/controllers/comment';
 import likeController from '@/controllers/likes';
 import validateToken from '@/middleware/verify-token';
+import sharingController from '@/controllers/shared-post'
 const router = new Router();
 
 // User
@@ -20,6 +21,10 @@ router
   .post('/posts', validateToken, postController.create)
   .del('/post/:id', validateToken, postController.delete)
   .put('/post/:id', validateToken, postController.put)
+  
+  // Sharing posts
+  .post('/share/:id', validateToken, sharingController.sharingPost)
+  .get('/share', sharingController.shareGet)
 
 // Comments
 router

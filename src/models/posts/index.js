@@ -10,10 +10,6 @@ export const postSchema = new Schema({
   description: {
     type: String
   },
-  isPublished: {
-    type: Boolean,
-    default: false
-  },
   author: {
     type: mongoose.Schema({
       userId: {
