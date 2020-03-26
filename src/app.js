@@ -2,12 +2,14 @@ require('dotenv').config();
 
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
+import morgan from 'koa-morgan';
 import db from './db';
+import router from './routes';
 
 const app = new Koa();
-app.use(bodyParser());
 
-import router from './routes';
+app.use(bodyParser());
+app.use(morgan('dev'));
 
 app
   .use(router.routes())

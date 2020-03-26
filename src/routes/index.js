@@ -10,8 +10,8 @@ const router = new Router();
 router
   .get('/users', validateToken, userController.getUsers)
   .get('/user/:id', validateToken, userController.getUserById)
-  .post('/api/auth', userController.userAuth)
-  .post('/api/register', userController.userRegister)
+  .post('/auth', userController.userAuth)
+  .post('/register', userController.userRegister)
 
 // Posts 
 router

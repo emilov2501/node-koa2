@@ -1,10 +1,13 @@
 import Post from '@/models/posts';
 import mongoose from 'mongoose';
 import Fawn from 'fawn';
-import HttpStatus from '@/utils/http-status-adapter';
+import { HttpStatus } from '@/utils';
 import Joi from 'joi';
 
 Fawn.init(mongoose, 'posts');
+
+const DISLIKE = -1
+const LIKE = 1
 
 function likeValidation(body) {
   function validate() {
@@ -29,13 +32,16 @@ export default {
 
     try {
       const post = await Post.findOne({ _id: postId });
+
       if (!post) {
-        ctx.status = HttpStatus.notFound;
+        ctx.status = HttpStatus.badRequest;
         ctx.body = {
           success: false,
           message: 'Post not found'
         }
-      }
+      };
+
+      if (post.likes === 0 && value === DISLIKE) return ctx.body = `${post._id} doesn't have any like`
 
       await likeTransaction(ctx, { postId: post._id, value });
 

@@ -6,8 +6,7 @@ export function postValidation (body) {
     const schema = {
       title: Joi.string().max(100).required(),
       description: Joi.string(),
-      isPublished: Joi.boolean(),
-      authorId: Joi.objectId()
+      isPublished: Joi.boolean()
     };
 
     return Joi.validate(body, schema);

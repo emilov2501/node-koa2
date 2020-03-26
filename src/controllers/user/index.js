@@ -1,11 +1,10 @@
 import User from '@/models/user';
 import Post from '@/models/posts';
 import { authValidation, registerValidation } from '@/models/user/validation'
-import { pick } from 'lodash';
-import hashing from '@/utils/hash';
 import bcrypt from 'bcrypt';
 import { userSerialization } from './serialization';
-import HttpStatus from '@/utils/http-status-adapter'
+import { pick } from 'lodash';
+import { hashing, HttpStatus } from '@/utils';
 
 export default {
   async userAuth(ctx, next) {

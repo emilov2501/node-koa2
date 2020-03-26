@@ -2,8 +2,7 @@ import Post from '@/models/posts';
 import User from '@/models/user';
 import { postValidation } from '@/models/posts/validation';
 import { pick } from 'lodash';
-import { Response, HttpStatus } from '@/utils';
-import createError from 'http-errors';
+import { HttpStatus } from '@/utils';
 
 const crud = {
   // Create post
@@ -12,7 +11,8 @@ const crud = {
     if (error) return ctx.body = error;
 
     try {
-      const user = await User.findOne({ _id: ctx.request.body.authorId });
+      const token = ctx.decoded;
+      const user = await User.findOne({ _id: token.user });
 
       const post = new Post({
         ...pick(ctx.request.body, ['title', 'description', 'isPublished']),
@@ -31,7 +31,7 @@ const crud = {
       }
       
     } catch(ex) {
-      ctx.status = HttpStatus.badRequest;
+      ctx.status = HttpStatus.serverError;
       ctx.body = {
         message: `Author is not found. ${ex.message}`,
         success: false
@@ -43,7 +43,6 @@ const crud = {
   async all(ctx, next) {
     const posts = await Post
       .find()
-      .select('author description title comments')
 
     ctx.status = HttpStatus.OK;
     ctx.body = {
