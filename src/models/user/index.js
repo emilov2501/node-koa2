@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import config from 'config';
+
 const Schema = mongoose.Schema;
 
-const EXPIRES_IN_MINUTES = '1440m'
+const EXPIRES_IN_MINUTES = '1440m';
+const JWT_PRIVATE_KEY = config.get('JWT_PRIVATE_KEY');
 
 export const userSchema = new Schema({
   name: {
@@ -27,7 +29,7 @@ export const userSchema = new Schema({
 });
 
 userSchema.statics.generateToken = function(payload) {
-  return jwt.sign(payload, config.get('jwtPrivateKey'), {
+  return jwt.sign(payload, JWT_PRIVATE_KEY, {
     expiresIn: EXPIRES_IN_MINUTES
   });
 }

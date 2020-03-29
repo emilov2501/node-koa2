@@ -5,7 +5,7 @@
   "author": "Эльдияр Эмилов <emilov2501@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec babel-node index.js",
+    "dev": "NODE_ENV=development nodemon --exec babel-node index.js",
     "postinstall": "link-module-alias",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline"
   },

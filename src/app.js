@@ -3,9 +3,11 @@ require('dotenv').config();
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import morgan from 'koa-morgan';
+import cors from '@koa/cors';
 import db from './db';
 import router from './routes';
 import config from 'config';
+import helmet from 'helmet';
 
 const JWT_PRIVATE_KEY = config.get('JWT_PRIVATE_KEY');
 
@@ -15,7 +17,7 @@ if (!JWT_PRIVATE_KEY) {
 }
 
 const app = new Koa();
-
+app.use(cors());
 app.use(bodyParser());
 app.use(morgan('dev'));
 
