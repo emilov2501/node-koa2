@@ -14,6 +14,7 @@ router
   .get('/user/:id', validateToken, userController.getUserById)
   .post('/auth', userController.userAuth)
   .post('/register', userController.userRegister)
+  .del('/user/:id', validateToken, userController.userDelete)
 
 // Posts 
 router

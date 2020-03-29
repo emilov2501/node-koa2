@@ -7,6 +7,13 @@ import { userSerialization } from './serialization';
 import { pick } from 'lodash';
 import { hashing, HttpStatus } from '@/utils';
 
+function getTokenPayload(user) {
+  return { 
+    user: user._id, 
+    isAdmin: user.isAdmin 
+  }
+};
+
 export default {
   async userAuth(ctx, next) {
     const error = authValidation(ctx.request.body);
@@ -24,7 +31,7 @@ export default {
       }
     };
 
-    const payload = { user: user._id }
+    const payload = getTokenPayload(user)
 
     const token = User.generateToken(payload);
     ctx.status = HttpStatus.OK;
@@ -46,7 +53,7 @@ export default {
     user = new User(pick(ctx.request.body, ['name', 'email', 'password']));
     user.password = await hashing(user.password);
 
-    const payload = { user: user._id }
+    const payload = getTokenPayload(user);
 
     const token = User.generateToken(payload);
 
@@ -56,6 +63,32 @@ export default {
       data: pick(user, userSerialization),
       token
     };
+  },
+
+  async userDelete(ctx, next) {
+    console.log(ctx.decoded);
+    const { isAdmin } = ctx.decoded;
+    if (!isAdmin) return ctx.body = 'You are not admin role';
+    
+    try {
+      
+      const user = await User.findOneAndDelete({ _id: ctx.params.id });
+      if (!user) ctx.throw(HttpStatus.badRequest, 'Bad Request');
+
+      ctx.status = HttpStatus.OK;
+      ctx.body = {
+        success: true,
+        message: 'User deleted'
+      };
+      
+    } catch(ex) {
+      ctx.status = HttpStatus.serverError;
+      ctx.body = {
+        success: false,
+        message: ex.message
+      }
+    }
+    
   },
 
   async getUsers(ctx, next) {
