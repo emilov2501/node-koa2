@@ -21,7 +21,7 @@ const port = process.env.PORT || 3001
 const host = process.env.HOST
 
 // Connection DB
-db(process.env.DB_PATH, (err) => {
+db.connect(process.env.DB_PATH, (err) => {
   if (err) return console.log('MongoDB is not connect...');
   app.listen(port, () => console.log(`Listening http://${host}:${port}`));
 });

@@ -5,6 +5,7 @@ import commentController from '@/controllers/comment';
 import likeController from '@/controllers/likes';
 import validateToken from '@/middleware/verify-token';
 import sharingController from '@/controllers/shared-post'
+
 const router = new Router();
 
 // User
