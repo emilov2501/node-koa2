@@ -7,7 +7,6 @@ import cors from '@koa/cors';
 import db from './db';
 import router from './routes';
 import config from 'config';
-import helmet from 'helmet';
 
 const JWT_PRIVATE_KEY = config.get('JWT_PRIVATE_KEY');
 
