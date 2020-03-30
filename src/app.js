@@ -4,9 +4,10 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import morgan from 'koa-morgan';
 import cors from '@koa/cors';
-import db from './db';
 import router from './routes';
 import config from 'config';
+
+const app = new Koa();
 
 const JWT_PRIVATE_KEY = config.get('JWT_PRIVATE_KEY');
 
@@ -15,22 +16,24 @@ if (!JWT_PRIVATE_KEY) {
   process.exit();
 }
 
-const app = new Koa();
-app.use(cors());
-app.use(bodyParser());
-app.use(morgan('dev'));
+function registerGlobalModules (app) {
+  app.use(cors());
+  app.use(bodyParser());
+  app.use(morgan('dev'));
+}
 
-app
-  .use(router.routes())
-  .use(router.allowedMethods());
+function* registerRouter(app) {
+  app
+    .use(router.routes())
+    .use(router.allowedMethods());
+}
 
+export function initApp() {
+  
+  registerGlobalModules(app);
+  registerRouter(app);
 
-
-const port = process.env.PORT || 3001
-const host = process.env.HOST
-
-// Connection DB
-db.connect(process.env.DB_PATH, (err) => {
-  if (err) return console.log('MongoDB is not connect...');
-  app.listen(port, () => console.log(`Listening http://${host}:${port}`));
-});
+  return {
+    app
+  }
+}
