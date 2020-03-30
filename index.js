@@ -4,8 +4,6 @@ const db = require('./src/db');
 const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST;
 
-
-
 function mountApp() {
   // Connection DB
   const { app } = initApp();

@@ -16,13 +16,13 @@ if (!JWT_PRIVATE_KEY) {
   process.exit();
 }
 
-function registerGlobalModules (app) {
+function registerGlobalModules () {
   app.use(cors());
   app.use(bodyParser());
   app.use(morgan('dev'));
 }
 
-function* registerRouter(app) {
+function registerRouter() {
   app
     .use(router.routes())
     .use(router.allowedMethods());
@@ -30,8 +30,8 @@ function* registerRouter(app) {
 
 export function initApp() {
   
-  registerGlobalModules(app);
-  registerRouter(app);
+  registerGlobalModules();
+  registerRouter();
 
   return {
     app

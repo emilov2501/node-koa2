@@ -24,7 +24,7 @@ export default {
 
     const validPassword = await bcrypt.compare(ctx.request.body.password, user.password);
     if (!validPassword) {
-      ctx.status = HttpStatus.notAcceptable;
+      ctx.status = HttpStatus.notFound;
       return ctx.body = {
         success: false,
         error: `Invalid email or password`,
